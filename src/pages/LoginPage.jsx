@@ -165,23 +165,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Tài khoản demo */}
-          <div className="mt-6 pt-5 border-t border-slate-100">
-            <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-3">Tài khoản thử nghiệm:</p>
-            <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => { setMode('login'); setForm(f => ({ ...f, email: 'duong@gmail.com', password: '123456' })); }}
-                className="text-left p-3 rounded-xl bg-orange-50 border border-orange-100 hover:bg-orange-100 transition-colors">
-                <div className="text-xs font-black text-orange-600 flex items-center gap-1"><School size={12}/> Giáo Viên</div>
-                <div className="text-xs text-slate-500 mt-0.5">duong@gmail.com</div>
-              </button>
-              <button onClick={() => { setMode('login'); setForm(f => ({ ...f, email: 'huynhthaian@12d9.com', password: '123456' })); }}
-                className="text-left p-3 rounded-xl bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-colors">
-                <div className="text-xs font-black text-indigo-600 flex items-center gap-1"><GraduationCap size={12}/> Học Sinh</div>
-                <div className="text-xs text-slate-500 mt-0.5">huynhthaian@12d9.com</div>
-              </button>
-            </div>
-            <p className="text-xs text-slate-400 text-center mt-3">Mật khẩu demo: <strong>123456</strong></p>
-          </div>
+
         </div>
       </div>
     </div>
