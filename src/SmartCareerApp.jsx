@@ -590,113 +590,195 @@ Quy tắc trả lời:
               </div>
             )}
 
-            {/* TAB 2: TRO LY AI */}
+            {/* TAB 2: TRO LY AI - PROFESSIONAL */}
             {activeTab === 2 && (
-              <div
-                className="flex flex-1 h-full flex-col bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden min-h-0"
-              >
-                <div className="p-5 bg-white border-b border-slate-100 flex-shrink-0">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="bg-gradient-to-tr from-indigo-500 to-purple-500 p-2 rounded-lg"><Bot className="text-white w-5 h-5"/></div>
-                    <h2 className="text-xl font-black text-slate-800">Trợ lý AI Hướng nghiệp (2026)</h2>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                    {prompts.map((p, i) => (
-                      <button 
-                        key={i} 
-                        onClick={() => handlePromptClick(p.text)}
-                        className={`px-4 py-3 rounded-xl border text-left flex gap-3 transition-all hover:scale-[1.02] hover:shadow-md ${p.color}`}
-                      >
-                        <div className="mt-0.5 flex-shrink-0">{p.icon}</div>
-                        <div>
-                          <div className="font-bold text-sm mb-1">{p.type}</div>
-                          <div className="text-[11px] opacity-80 line-clamp-2 leading-snug">{p.text}</div>
+              <div className="flex flex-1 h-full flex-col overflow-hidden min-h-0">
+
+                {/* HEADER GRADIENT */}
+                <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 px-5 py-4 flex-shrink-0 shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center border-2 border-white/30">
+                          <Bot className="text-white w-6 h-6"/>
                         </div>
+                        <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-white animate-pulse"/>
+                      </div>
+                      <div>
+                        <h2 className="text-white font-black text-lg leading-tight">SmartCareer AI</h2>
+                        <p className="text-white/70 text-xs font-medium">Online &bull; Hướng nghiệp 2026</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setChatMessages([{ role: 'ai', content: 'Chào bạn! Mình là Trợ lý AI Hướng nghiệp. Hãy điền đầy đủ dữ liệu ở Tab "Hồ sơ" để mình tư vấn chuyên sâu nhất cho định hướng thi 2026 của bạn nhé! 🎯' }])}
+                      title="Xóa lịch sử chat"
+                      className="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center border border-white/20 transition-all"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M9 3h6l1 1h4v2H4V4h4L9 3zm-2 4h10l-1 13H8L7 7zm2 2v9h1V9H9zm3 0v9h1V9h-1z"/></svg>
+                    </button>
+                  </div>
+
+                  {/* Quick Prompts scrollable chips */}
+                  <div className="flex gap-2 mt-4 overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
+                    {prompts.map((p, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handlePromptClick(p.text)}
+                        disabled={isTyping}
+                        className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                      >
+                        <span>{p.icon}</span>
+                        <span className="whitespace-nowrap">{p.type}</span>
                       </button>
                     ))}
+                    <button
+                      onClick={() => handlePromptClick('Tóm tắt điểm mạnh và điểm yếu của tôi dựa trên hồ sơ, cho tôi 1 lời khuyên quan trọng nhất.')}
+                      disabled={isTyping}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                    >
+                      <Star size={13}/><span className="whitespace-nowrap">Tóm tắt hồ sơ</span>
+                    </button>
+                    <button
+                      onClick={() => handlePromptClick('Với điểm số của tôi, tôi có thể vào trường đại học nào gần nhà? Liệt kê tên trường và ngành phù hợp.')}
+                      disabled={isTyping}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                    >
+                      <Map size={13}/><span className="whitespace-nowrap">Trường gần nhà</span>
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex-1 p-5 overflow-y-auto space-y-5 bg-gradient-to-b from-slate-50 to-white">
-                  {chatMessages.map((msg, i) => (
-                    <div key={i} className={`flex gap-3 items-end ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      {msg.role === 'ai' && (
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg flex-shrink-0 border-2 border-white">
-                          <Bot className="text-white w-5 h-5" />
+                {/* CHAT MESSAGES */}
+                <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-50 to-white">
+                  <div className="p-4 md:p-6 space-y-4">
+                    {chatMessages.map((msg, i) => (
+                      <div key={i} className={`flex gap-3 items-end ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        {msg.role === 'ai' && (
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md flex-shrink-0 border-2 border-white">
+                            <Bot className="text-white w-4 h-4" />
+                          </div>
+                        )}
+                        <div className="flex flex-col gap-1.5 max-w-[80%]">
+                          <span className={`text-[10px] font-bold uppercase tracking-wide px-1 ${msg.role === 'user' ? 'text-right text-indigo-400' : 'text-slate-400'}`}>
+                            {msg.role === 'user' ? studentInfo.name : 'SmartCareer AI'}
+                          </span>
+                          <div className={`px-4 py-3.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
+                            msg.role === 'user'
+                              ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-br-none'
+                              : 'bg-white border border-slate-100 text-slate-700 rounded-bl-none shadow-md'
+                          }`}>
+                            {msg.role === 'ai' ? renderMarkdown(msg.content) : <p>{msg.content}</p>}
+                          </div>
+                          {msg.role === 'ai' && (
+                            <button
+                              onClick={() => {
+                                if (window.speechSynthesis.speaking) { window.speechSynthesis.cancel(); return; }
+                                const utter = new SpeechSynthesisUtterance(msg.content.replace(/[#*`_~]/g,'').replace(/\n/g,' '));
+                                utter.lang = 'vi-VN'; utter.rate = 1.05;
+                                window.speechSynthesis.speak(utter);
+                              }}
+                              className="flex items-center gap-1.5 text-[10px] text-slate-400 hover:text-indigo-500 font-semibold ml-1 transition-colors group"
+                              title="Nhấn để nghe AI đọc to câu trả lời"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                              <span>🔊 Nghe AI đọc</span>
+                            </button>
+                          )}
                         </div>
-                      )}
-                      <div className={`px-5 py-4 rounded-3xl max-w-[78%] text-sm leading-relaxed shadow-sm ${
-                        msg.role === 'user' 
-                        ? 'bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-br-sm' 
-                        : 'bg-white border border-slate-100 rounded-bl-sm text-slate-700'
-                      }`}>
-                        {msg.role === 'ai' ? renderMarkdown(msg.content) : <p>{msg.content}</p>}
+                        {msg.role === 'user' && (
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center flex-shrink-0 text-white font-black border-2 border-white shadow-md">
+                            {studentInfo.avatar}
+                          </div>
+                        )}
                       </div>
-                      {msg.role === 'user' && (
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center flex-shrink-0 text-white font-black text-lg border-2 border-white shadow-lg">
-                          {studentInfo.avatar}
+                    ))}
+
+                    {isTyping && (
+                      <div className="flex gap-3 items-end">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center border-2 border-white shadow-md flex-shrink-0">
+                          <Bot className="text-white w-4 h-4 animate-pulse" />
                         </div>
-                      )}
-                    </div>
-                  ))}
-                  
-                  {isTyping && (
-                    <div className="flex gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center border-2 border-white shadow-lg">
-                        <Bot className="text-white w-5 h-5 animate-pulse" />
+                        <div className="bg-white border border-slate-100 px-5 py-4 rounded-2xl rounded-bl-none shadow-md flex items-center gap-2">
+                          {[0,80,160].map(d => (
+                            <span key={d} className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-bounce" style={{animationDelay:`${d}ms`}}/>
+                          ))}
+                          <span className="text-xs text-slate-400 ml-1 font-medium">AI đang suy nghĩ...</span>
+                        </div>
                       </div>
-                      <div className="bg-white border border-slate-100 p-4 rounded-2xl rounded-tl-none flex items-center gap-2 shadow-sm">
-                        <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-bounce"></span>
-                        <span className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-bounce" style={{animationDelay:'80ms'}}></span>
-                        <span className="w-2.5 h-2.5 rounded-full bg-pink-500 animate-bounce" style={{animationDelay:'160ms'}}></span>
-                        <span className="text-xs text-slate-400 ml-2 font-medium">AI đang phân tích...</span>
-                      </div>
-                    </div>
-                  )}
-                  <div ref={chatEndRef} />
+                    )}
+                    <div ref={chatEndRef} />
+                  </div>
                 </div>
 
-                {/* Chat Input + Mic */}
-                <div className="p-4 bg-white border-t border-slate-100 flex-shrink-0">
+                {/* INPUT BAR */}
+                <div className="bg-white border-t border-slate-100 px-4 py-3 flex-shrink-0">
+                  {isListening && (
+                    <div className="flex items-center justify-center gap-1 mb-2 h-7">
+                      {[...Array(7)].map((_, i) => (
+                        <span key={i} className="w-1 rounded-full bg-rose-400 animate-bounce"
+                          style={{height:`${10 + (i % 3) * 6}px`, animationDelay:`${i * 60}ms`}}/>
+                      ))}
+                      <span className="text-xs text-rose-500 font-bold ml-2 animate-pulse">🎤 Đang ghi âm...</span>
+                    </div>
+                  )}
                   <div className="flex gap-2 items-center">
                     {/* Mic Button */}
                     <button
                       onClick={handleMicClick}
-                      title={isListening ? 'Đang nghe...' : 'Nhấn giữ và nói'}
-                      className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all shadow ${
-                        isListening 
-                        ? 'bg-red-500 text-white animate-pulse scale-110' 
-                        : 'bg-slate-100 text-slate-500 hover:bg-indigo-100 hover:text-indigo-600'
+                      title={isListening ? 'Đang nghe - nhấn để dừng' : 'Nhấn để hỏi bằng giọng nói (tiếng Việt)'}
+                      className={`relative w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${
+                        isListening
+                          ? 'bg-rose-500 text-white scale-105 shadow-lg shadow-rose-200'
+                          : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:shadow-md'
                       }`}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={isListening ? 'white' : 'currentColor'}>
+                      {isListening && <span className="absolute inset-0 rounded-2xl bg-rose-400 animate-ping opacity-40"/>}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-1 14.93V20H9v2h6v-2h-2v-2.07A7 7 0 0 0 19 11h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.93z"/>
                       </svg>
                     </button>
-                    {/* Text Input */}
-                    <input 
-                      type="text" 
-                      value={activeChat}
-                      onChange={e => setActiveChat(e.target.value)}
-                      onKeyDown={e => { if (e.key === 'Enter' && activeChat.trim()) handlePromptClick(activeChat); }}
-                      placeholder={isListening ? 'Đang nghe giọng nói...' : 'Gõ câu hỏi bất kỳ cho Trợ lý AI...'}
-                      className={`flex-1 border-2 rounded-2xl px-5 py-3.5 focus:outline-none transition-colors text-sm ${
-                        isListening 
-                        ? 'bg-red-50 border-red-200 text-red-700 font-medium' 
-                        : 'bg-slate-50 border-slate-100 focus:border-indigo-400 focus:bg-white'
-                      }`}
-                    />
+
+                    {/* Text input */}
+                    <div className="flex-1 relative">
+                      <input
+                        type="text"
+                        value={activeChat}
+                        onChange={e => setActiveChat(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter' && activeChat.trim() && !isTyping) { handlePromptClick(activeChat); setActiveChat(''); }}}
+                        placeholder={isListening ? '🎤 Đang ghi âm giọng nói...' : 'Nhập câu hỏi hoặc nhấn 🎤 để nói...'}
+                        disabled={isTyping}
+                        className={`w-full rounded-2xl px-5 py-3.5 text-sm border-2 focus:outline-none transition-all ${
+                          isListening ? 'bg-rose-50 border-rose-200 text-rose-700 font-medium'
+                          : isTyping ? 'bg-slate-50 border-slate-100 text-slate-400 cursor-not-allowed'
+                          : 'bg-slate-50 border-slate-200 focus:border-indigo-400 focus:bg-white hover:border-slate-300'
+                        }`}
+                      />
+                      {activeChat && !isTyping && (
+                        <button onClick={() => setActiveChat('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        </button>
+                      )}
+                    </div>
+
                     {/* Send Button */}
-                    <button 
-                      onClick={() => { if (activeChat.trim()) handlePromptClick(activeChat); }}
-                      className="w-12 h-12 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-indigo-200 flex-shrink-0"
+                    <button
+                      onClick={() => { if (activeChat.trim() && !isTyping) { handlePromptClick(activeChat); setActiveChat(''); }}}
+                      disabled={!activeChat.trim() || isTyping}
+                      className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${
+                        activeChat.trim() && !isTyping
+                          ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-md hover:shadow-indigo-200 hover:shadow-lg hover:scale-105 active:scale-95'
+                          : 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                      }`}
                     >
                       <Send className="w-5 h-5" />
                     </button>
                   </div>
+                  <p className="text-center text-[10px] text-slate-300 mt-2">SmartCareer AI • Kết quả mang tính tham khảo định hướng</p>
                 </div>
               </div>
             )}
+
+
 
             {/* TAB 3: CHIEN THUAT 3 TANG */}
             {activeTab === 3 && (
