@@ -90,6 +90,7 @@ const SmartCareerApp = () => {
       const cls = dbService.getClassById(currentUser.classId);
       if (cls) setStudentInfo(s => ({ ...s, className: cls.name }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser?.id]);
 
   const saveProfile = () => {
@@ -113,8 +114,6 @@ const SmartCareerApp = () => {
     { type: 'Đam mê vs Điểm', text: 'Điểm môn tự chọn của tôi đang cao, nhưng sở thích của tôi lại thiên về hướng khác. Tôi nên chọn ngành theo điểm hay theo đam mê?', icon: <AlertCircle size={16}/>, color: 'bg-rose-100 text-rose-700 hover:bg-rose-200 border-rose-200' },
   ];
 
-  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || "";
-  const OPENAI_MODEL = "gpt-4o-mini";
 
   const handlePromptClick = async (promptText) => {
     const newUserMsg = { role: 'user', content: promptText };
@@ -145,20 +144,16 @@ Quy tắc trả lời:
         content: msg.content
       }));
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENAI_API_KEY}`
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: OPENAI_MODEL,
           messages: [
             { role: 'system', content: systemPrompt },
             ...apiHistory
-          ],
-          temperature: 0.7,
-          max_completion_tokens: 900
+          ]
         })
       });
 
@@ -290,7 +285,7 @@ Quy tắc trả lời:
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: '#f8fafc', fontFamily: 'system-ui, -apple-system, sans-serif', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', backgroundColor: '#f8fafc', fontFamily: 'system-ui, -apple-system, sans-serif', overflow: 'hidden' }}>
       
       {/* MOBILE HEADER */}
       <div className="md:hidden bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-4 flex items-center justify-between shadow-md z-20">
@@ -506,7 +501,7 @@ Quy tắc trả lời:
                         <div className="border-t border-slate-100 pt-4">
                           <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-3">Nhập điểm các môn đã chọn:</p>
                           <div className="grid grid-cols-2 gap-4">
-                            {selectedElectives.map((e, i) => {
+                            {selectedElectives.map((e) => {
                               const subj = ELECTIVE_LIST.find(s => s.name === e.name);
                               return (
                                 <div key={e.name} className="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200">
